@@ -33,7 +33,7 @@ class _StopwatchPageState extends State<StopWatchPage> {
 
   @override
   Widget build(BuildContext context) => Scaffold(
-        body: Center(child: buildTime()),
+        body: Center(child: Column(children: [buildTime(), buildButtons()])),
       );
 
   Widget buildTime() {
@@ -43,5 +43,16 @@ class _StopwatchPageState extends State<StopWatchPage> {
     final seconds = padDigits(duration.inSeconds.remainder(60), 2);
     final milliseconds = padDigits(duration.inMilliseconds.remainder(1000), 3);
     return Text('$minutes:$seconds:$milliseconds');
+  }
+
+  Widget buildButtons() {
+    final isRunning = false;
+
+    return isRunning
+        ? Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
+            ElevatedButton(onPressed: () {}, child: const Text('STOP')),
+            ElevatedButton(onPressed: () {}, child: const Text('RESET')),
+          ])
+        : ElevatedButton(onPressed: () {}, child: const Text('START'));
   }
 }

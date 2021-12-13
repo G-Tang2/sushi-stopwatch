@@ -14,6 +14,9 @@ class _StopwatchPageState extends State<StopWatchPage> {
   Duration duration = const Duration();
   Timer? timer;
   double _secondsPerRoll = 30;
+  double _numberOfRolls = 8;
+  int expectedCompletedRolls = 0;
+  final int intervalInMilliseconds = 47;
   final AudioCache _audioCache = AudioCache(
     prefix: 'assets/audio/',
     fixedPlayer: AudioPlayer()..setReleaseMode(ReleaseMode.STOP),
@@ -25,9 +28,8 @@ class _StopwatchPageState extends State<StopWatchPage> {
   }
 
   void addTime() {
-    const addMilliseconds = 47;
     setState(() {
-      final milliseconds = duration.inMilliseconds + addMilliseconds;
+      final milliseconds = duration.inMilliseconds + intervalInMilliseconds;
       duration = Duration(milliseconds: milliseconds);
     });
 
@@ -36,13 +38,17 @@ class _StopwatchPageState extends State<StopWatchPage> {
 
   void intervalNotification(double intervalInSeconds) {
     if (duration.inSeconds % intervalInSeconds == 0 &&
-        duration.inMilliseconds % 1000 < 47) {
+        duration.inMilliseconds % 1000 < intervalInMilliseconds) {
+      expectedCompletedRolls++;
       _audioCache.play('beep.mp3');
     }
   }
 
   void reset() {
-    setState(() => duration = const Duration());
+    setState(() {
+      duration = const Duration();
+      expectedCompletedRolls = 0;
+    });
   }
 
   void startTimer({bool resets = true}) {
@@ -112,22 +118,57 @@ class _StopwatchPageState extends State<StopWatchPage> {
     });
   }
 
+  void updateNumberOfRolls(double value) {
+    setState(() {
+      _numberOfRolls = value;
+    });
+  }
+
+  Widget sliderWithText(
+      {required String displayText,
+      required double value,
+      required double min,
+      required double max,
+      required callback}) {
+    return Column(children: <Widget>[
+      Text(displayText),
+      Slider(
+          value: value,
+          min: min,
+          max: max,
+          divisions: (max - min).round(),
+          onChanged: (value) {
+            callback(value);
+          })
+    ]);
+  }
+
   Widget buildConfigFields() {
     final isCompleted = duration.inMilliseconds == 0;
     return Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          Text('Seconds per roll: ${_secondsPerRoll.round()}s'),
           isCompleted
-              ? Slider(
-                  value: _secondsPerRoll,
-                  min: 10,
-                  max: 60,
-                  divisions: 50,
-                  onChanged: (value) {
-                    updateSecondPerRoll(value);
-                  })
-              : Container()
+              ? Column(children: <Widget>[
+                  sliderWithText(
+                      displayText:
+                          'Seconds per roll: ${_secondsPerRoll.round()}s',
+                      value: _secondsPerRoll,
+                      min: 10,
+                      max: 60,
+                      callback: updateSecondPerRoll),
+                  sliderWithText(
+                      displayText: 'Number of rolls: ${_numberOfRolls.round()}',
+                      value: _numberOfRolls,
+                      min: 1,
+                      max: 32,
+                      callback: updateNumberOfRolls),
+                ])
+              : Column(children: <Widget>[
+                  Text('Seconds per roll: ${_secondsPerRoll.round()}s'),
+                  Text(
+                      'Expected number of rolls completed: $expectedCompletedRolls')
+                ])
         ]);
   }
 }

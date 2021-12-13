@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 
 class StopWatchPage extends StatefulWidget {
@@ -12,6 +13,10 @@ class StopWatchPage extends StatefulWidget {
 class _StopwatchPageState extends State<StopWatchPage> {
   Duration duration = const Duration();
   Timer? timer;
+  final AudioCache _audioCache = AudioCache(
+    prefix: 'assets/audio/',
+    fixedPlayer: AudioPlayer()..setReleaseMode(ReleaseMode.STOP),
+  );
 
   @override
   void initState() {
@@ -24,6 +29,15 @@ class _StopwatchPageState extends State<StopWatchPage> {
       final milliseconds = duration.inMilliseconds + addMilliseconds;
       duration = Duration(milliseconds: milliseconds);
     });
+
+    intervalNotification(10);
+  }
+
+  void intervalNotification(int secondInterval) {
+    if (duration.inSeconds % secondInterval == 0 &&
+        duration.inMilliseconds % 1000 < 47) {
+      _audioCache.play('beep.mp3');
+    }
   }
 
   void reset() {

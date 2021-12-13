@@ -16,7 +16,6 @@ class _StopwatchPageState extends State<StopWatchPage> {
   @override
   void initState() {
     super.initState();
-    startTimer();
   }
 
   void addTime() {
@@ -27,8 +26,23 @@ class _StopwatchPageState extends State<StopWatchPage> {
     });
   }
 
-  void startTimer() {
+  void reset() {
+    setState(() => duration = Duration());
+  }
+
+  void startTimer({bool resets = true}) {
+    if (resets) {
+      reset();
+    }
     timer = Timer.periodic(const Duration(milliseconds: 47), (_) => addTime());
+  }
+
+  void stopTimer({bool resets = true}) {
+    if (resets) {
+      reset();
+    }
+
+    setState(() => timer?.cancel());
   }
 
   @override
@@ -46,13 +60,29 @@ class _StopwatchPageState extends State<StopWatchPage> {
   }
 
   Widget buildButtons() {
-    final isRunning = false;
+    final isRunning = timer == null ? false : timer!.isActive;
+    final isCompleted = duration.inMilliseconds == 0;
 
-    return isRunning
+    return isRunning || !isCompleted
         ? Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
-            ElevatedButton(onPressed: () {}, child: const Text('STOP')),
-            ElevatedButton(onPressed: () {}, child: const Text('RESET')),
+            ElevatedButton(
+                onPressed: () {
+                  if (isRunning) {
+                    stopTimer(resets: false);
+                  } else {
+                    startTimer(resets: false);
+                  }
+                },
+                child: Text(isRunning ? 'PAUSE' : 'RESUME')),
+            isRunning
+                ? Container()
+                : ElevatedButton(
+                    onPressed: stopTimer, child: const Text('RESET')),
           ])
-        : ElevatedButton(onPressed: () {}, child: const Text('START'));
+        : ElevatedButton(
+            onPressed: () {
+              startTimer();
+            },
+            child: const Text('START'));
   }
 }

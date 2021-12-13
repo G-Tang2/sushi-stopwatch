@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 
 class StopWatchPage extends StatefulWidget {
@@ -8,7 +10,26 @@ class StopWatchPage extends StatefulWidget {
 }
 
 class _StopwatchPageState extends State<StopWatchPage> {
-  Duration duration = Duration();
+  Duration duration = const Duration();
+  Timer? timer;
+
+  @override
+  void initState() {
+    super.initState();
+    startTimer();
+  }
+
+  void addTime() {
+    const addMilliseconds = 47;
+    setState(() {
+      final milliseconds = duration.inMilliseconds + addMilliseconds;
+      duration = Duration(milliseconds: milliseconds);
+    });
+  }
+
+  void startTimer() {
+    timer = Timer.periodic(const Duration(milliseconds: 47), (_) => addTime());
+  }
 
   @override
   Widget build(BuildContext context) => Scaffold(

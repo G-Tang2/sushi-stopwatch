@@ -13,6 +13,7 @@ class StopWatchPage extends StatefulWidget {
 class _StopwatchPageState extends State<StopWatchPage> {
   Duration duration = const Duration();
   Timer? timer;
+  double _secondsPerRoll = 30;
   final AudioCache _audioCache = AudioCache(
     prefix: 'assets/audio/',
     fixedPlayer: AudioPlayer()..setReleaseMode(ReleaseMode.STOP),
@@ -30,18 +31,18 @@ class _StopwatchPageState extends State<StopWatchPage> {
       duration = Duration(milliseconds: milliseconds);
     });
 
-    intervalNotification(10);
+    intervalNotification(_secondsPerRoll);
   }
 
-  void intervalNotification(int secondInterval) {
-    if (duration.inSeconds % secondInterval == 0 &&
+  void intervalNotification(double intervalInSeconds) {
+    if (duration.inSeconds % intervalInSeconds == 0 &&
         duration.inMilliseconds % 1000 < 47) {
       _audioCache.play('beep.mp3');
     }
   }
 
   void reset() {
-    setState(() => duration = Duration());
+    setState(() => duration = const Duration());
   }
 
   void startTimer({bool resets = true}) {
@@ -61,7 +62,12 @@ class _StopwatchPageState extends State<StopWatchPage> {
 
   @override
   Widget build(BuildContext context) => Scaffold(
-        body: Center(child: Column(children: [buildTime(), buildButtons()])),
+        body: Center(
+            child: Column(children: [
+          buildTime(),
+          buildStopwatchButtons(),
+          buildConfigFields()
+        ])),
       );
 
   Widget buildTime() {
@@ -73,7 +79,7 @@ class _StopwatchPageState extends State<StopWatchPage> {
     return Text('$minutes:$seconds:$milliseconds');
   }
 
-  Widget buildButtons() {
+  Widget buildStopwatchButtons() {
     final isRunning = timer == null ? false : timer!.isActive;
     final isCompleted = duration.inMilliseconds == 0;
 
@@ -98,5 +104,30 @@ class _StopwatchPageState extends State<StopWatchPage> {
               startTimer();
             },
             child: const Text('START'));
+  }
+
+  void updateSecondPerRoll(double value) {
+    setState(() {
+      _secondsPerRoll = value;
+    });
+  }
+
+  Widget buildConfigFields() {
+    final isCompleted = duration.inMilliseconds == 0;
+    return Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Text('Seconds per roll: ${_secondsPerRoll.round()}s'),
+          isCompleted
+              ? Slider(
+                  value: _secondsPerRoll,
+                  min: 10,
+                  max: 60,
+                  divisions: 50,
+                  onChanged: (value) {
+                    updateSecondPerRoll(value);
+                  })
+              : Container()
+        ]);
   }
 }

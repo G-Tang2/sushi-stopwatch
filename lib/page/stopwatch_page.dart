@@ -2,7 +2,8 @@ import 'dart:async';
 
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
-import 'package:sushi_stopwatch/page/report_page.dart';
+import 'package:sushi_stopwatch/page/results_page.dart';
+import 'package:sushi_stopwatch/widget/formatted_time.dart';
 
 class StopWatchPage extends StatefulWidget {
   const StopWatchPage({Key? key}) : super(key: key);
@@ -27,6 +28,19 @@ class _StopwatchPageState extends State<StopWatchPage> {
   void initState() {
     super.initState();
   }
+
+  @override
+  Widget build(BuildContext context) => Scaffold(
+        body: Center(
+            child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+              FormattedTime(_duration).buildTime(),
+              buildStopwatchButtons(),
+              buildConfigFields()
+            ])),
+      );
 
   void addTime() {
     setState(() {
@@ -75,30 +89,11 @@ class _StopwatchPageState extends State<StopWatchPage> {
               context,
               MaterialPageRoute(
                   builder: (context) =>
-                      ReportPage(_duration, _numberOfRolls))).then((value) {
+                      ResultsPage(_duration, _numberOfRolls))).then((value) {
             reset();
           });
         },
         child: const Text('STOP'));
-  }
-
-  @override
-  Widget build(BuildContext context) => Scaffold(
-        body: Center(
-            child: Column(children: [
-          buildTime(),
-          buildStopwatchButtons(),
-          buildConfigFields()
-        ])),
-      );
-
-  Widget buildTime() {
-    String padDigits(int n, int padLength) =>
-        n.toString().padLeft(padLength, '0');
-    final minutes = padDigits(_duration.inMinutes.remainder(60), 2);
-    final seconds = padDigits(_duration.inSeconds.remainder(60), 2);
-    final milliseconds = padDigits(_duration.inMilliseconds.remainder(1000), 3);
-    return Text('$minutes:$seconds:$milliseconds');
   }
 
   Widget buildStopwatchButtons() {

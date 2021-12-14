@@ -161,6 +161,12 @@ class _StopwatchPageState extends State<StopWatchPage> {
 
   Widget buildConfigFields() {
     final isCompleted = _duration.inMilliseconds == 0;
+    double estimatedTime = _secondsPerRoll * _numberOfRolls;
+    final duration = Duration(seconds: estimatedTime.round());
+    final minutes = duration.inMinutes;
+    final seconds = duration.inSeconds % 60;
+    final rollsPerHour = (60 * 60 / _secondsPerRoll).round();
+
     return Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
@@ -168,7 +174,7 @@ class _StopwatchPageState extends State<StopWatchPage> {
               ? Column(children: <Widget>[
                   sliderWithText(
                       displayText:
-                          'Seconds per roll: ${_secondsPerRoll.round()}s',
+                          'Seconds per roll: ${_secondsPerRoll.round()} \n($rollsPerHour rolls per hour)',
                       value: _secondsPerRoll,
                       min: 10,
                       max: 60,
@@ -179,6 +185,7 @@ class _StopwatchPageState extends State<StopWatchPage> {
                       min: 1,
                       max: 32,
                       callback: updateNumberOfRolls),
+                  Text('Estimated duration: ${minutes}m ${seconds}s'),
                 ])
               : Column(children: <Widget>[
                   Text('Seconds per roll: ${_secondsPerRoll.round()}s'),

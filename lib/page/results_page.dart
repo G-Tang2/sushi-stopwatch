@@ -9,16 +9,24 @@ class ResultsPage extends StatelessWidget {
       : super(key: key);
 
   Widget reportInfo() {
-    final secondsPerRoll = _duration.inSeconds / _numberOfRolls;
-    final rollsPerHour = ((60 * 60) / secondsPerRoll).round();
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: <Widget>[
-        FormattedTime(_duration).buildTime(),
-        Text('${secondsPerRoll}s/roll ($rollsPerHour rolls/hr)')
-      ],
-    );
+    double secondsPerRoll;
+    int rollsPerHour;
+    if (_duration.inSeconds > 5) {
+      secondsPerRoll = _duration.inSeconds / _numberOfRolls;
+      rollsPerHour = ((60 * 60) / secondsPerRoll).round();
+      return Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: <Widget>[
+          FormattedTime(_duration).buildTime(),
+          Text('${secondsPerRoll}s/roll ($rollsPerHour rolls/hr)')
+        ],
+      );
+    } else {
+      return const Text(
+          'Mate, you can\'t finish making hand rolls that quickly.',
+          textAlign: TextAlign.center);
+    }
   }
 
   @override

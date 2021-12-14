@@ -3,9 +3,12 @@ import 'dart:async';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:sushi_stopwatch/page/results_page.dart';
+import 'package:sushi_stopwatch/route_generator.dart';
 import 'package:sushi_stopwatch/widget/formatted_time.dart';
 
 class StopWatchPage extends StatefulWidget {
+  static const String route = '/stopwatch';
+
   const StopWatchPage({Key? key}) : super(key: key);
 
   @override
@@ -27,19 +30,28 @@ class _StopwatchPageState extends State<StopWatchPage> {
   @override
   void initState() {
     super.initState();
+    startTimer();
   }
 
   @override
   Widget build(BuildContext context) => Scaffold(
         body: Center(
-            child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-              FormattedTime(_duration).buildTime(),
-              buildStopwatchButtons(),
-              buildConfigFields()
-            ])),
+          child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Expanded(
+                    child: Column(children: [
+                  const Spacer(flex: 5),
+                  FormattedTime(_duration).buildTime(),
+                  const Spacer(flex: 3),
+                ])),
+                Container(
+                  child: buildStopwatchButtons(),
+                  margin: const EdgeInsets.fromLTRB(15, 20, 15, 20),
+                )
+              ]),
+        ),
       );
 
   void addTime() {
@@ -85,11 +97,9 @@ class _StopwatchPageState extends State<StopWatchPage> {
     return ElevatedButton(
         onPressed: () {
           pauseTimer(resets: false);
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) =>
-                      ResultsPage(_duration, _numberOfRolls))).then((value) {
+          Navigator.pushNamed(context, ResultsPage.route,
+                  arguments: ResultsArguments(_duration, _numberOfRolls))
+              .then((value) {
             reset();
           });
         },
@@ -98,29 +108,21 @@ class _StopwatchPageState extends State<StopWatchPage> {
 
   Widget buildStopwatchButtons() {
     final isRunning = _timer == null ? false : _timer!.isActive;
-    final isCompleted = _duration.inMilliseconds == 0;
 
-    return isRunning || !isCompleted
-        ? Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
-            ElevatedButton(
-                onPressed: () {
-                  if (isRunning) {
-                    pauseTimer(resets: false);
-                  } else {
-                    startTimer(resets: false);
-                  }
-                },
-                child: Text(isRunning ? 'PAUSE' : 'RESUME')),
-            isRunning
-                ? stopTimer()
-                : ElevatedButton(
-                    onPressed: pauseTimer, child: const Text('RESET')),
-          ])
-        : ElevatedButton(
-            onPressed: () {
-              startTimer();
-            },
-            child: const Text('START'));
+    return Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
+      ElevatedButton(
+          onPressed: () {
+            if (isRunning) {
+              pauseTimer(resets: false);
+            } else {
+              startTimer(resets: false);
+            }
+          },
+          child: Text(isRunning ? 'PAUSE' : 'RESUME')),
+      isRunning
+          ? stopTimer()
+          : ElevatedButton(onPressed: pauseTimer, child: const Text('RESET')),
+    ]);
   }
 
   void updateSecondPerRoll(double value) {
@@ -133,60 +135,5 @@ class _StopwatchPageState extends State<StopWatchPage> {
     setState(() {
       _numberOfRolls = value;
     });
-  }
-
-  Widget sliderWithText(
-      {required String displayText,
-      required double value,
-      required double min,
-      required double max,
-      required callback}) {
-    return Column(children: <Widget>[
-      Text(displayText),
-      Slider(
-          value: value,
-          min: min,
-          max: max,
-          divisions: (max - min).round(),
-          onChanged: (value) {
-            callback(value);
-          })
-    ]);
-  }
-
-  Widget buildConfigFields() {
-    final isCompleted = _duration.inMilliseconds == 0;
-    double estimatedTime = _secondsPerRoll * _numberOfRolls;
-    final duration = Duration(seconds: estimatedTime.round());
-    final minutes = duration.inMinutes;
-    final seconds = duration.inSeconds % 60;
-    final rollsPerHour = (60 * 60 / _secondsPerRoll).round();
-
-    return Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          isCompleted
-              ? Column(children: <Widget>[
-                  sliderWithText(
-                      displayText:
-                          'Seconds per roll: ${_secondsPerRoll.round()} \n($rollsPerHour rolls per hour)',
-                      value: _secondsPerRoll,
-                      min: 10,
-                      max: 60,
-                      callback: updateSecondPerRoll),
-                  sliderWithText(
-                      displayText: 'Number of rolls: ${_numberOfRolls.round()}',
-                      value: _numberOfRolls,
-                      min: 1,
-                      max: 32,
-                      callback: updateNumberOfRolls),
-                  Text('Estimated duration: ${minutes}m ${seconds}s'),
-                ])
-              : Column(children: <Widget>[
-                  Text('Seconds per roll: ${_secondsPerRoll.round()}s'),
-                  Text(
-                      'Expected number of rolls completed: $_expectedCompletedRolls')
-                ])
-        ]);
   }
 }

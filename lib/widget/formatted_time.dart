@@ -11,7 +11,8 @@ class FormattedTime extends StatelessWidget {
     final minutes = padDigits(_duration.inMinutes.remainder(60), 2);
     final seconds = padDigits(_duration.inSeconds.remainder(60), 2);
     final milliseconds = padDigits(_duration.inMilliseconds.remainder(1000), 3);
-    return Text('$minutes:$seconds:$milliseconds');
+    return Text('$minutes:$seconds:$milliseconds',
+        style: const TextStyle(fontSize: 80));
   }
 
   @override

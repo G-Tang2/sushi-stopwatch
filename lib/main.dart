@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:sushi_stopwatch/page/stopwatch_page.dart';
+import 'package:sushi_stopwatch/route_generator.dart';
 
 void main() {
   runApp(const MyApp());
@@ -14,7 +14,8 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const StopWatchPage(),
+      initialRoute: '/',
+      onGenerateRoute: RouteGenerator.generateRoute,
     );
   }
 }

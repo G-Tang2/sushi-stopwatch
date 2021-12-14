@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:sushi_stopwatch/widget/formatted_time.dart';
 
 class ResultsPage extends StatelessWidget {
+  static const String route = '/results';
   final Duration _duration;
   final double _numberOfRolls;
 
@@ -40,7 +41,10 @@ class ResultsPage extends StatelessWidget {
             reportInfo(),
             ElevatedButton(
                 onPressed: () {
-                  Navigator.pop(context);
+                  Navigator.popUntil(
+                      context,
+                      (Route<dynamic> predicate) =>
+                          predicate.isFirst); // TODO: Issue with named routes
                 },
                 child: const Text('BACK'))
           ])),

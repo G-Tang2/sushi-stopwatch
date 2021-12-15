@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:sushi_stopwatch/page/results_page.dart';
 import 'package:sushi_stopwatch/page/stopwatch_page.dart';
 import 'package:sushi_stopwatch/route_generator.dart';
 
@@ -31,7 +30,10 @@ class _HomePageState extends State<HomePage> {
                 Expanded(
                     child: Column(children: [
                   const Spacer(flex: 5),
-                  Text("Placeholder"),
+                  const Text(
+                    "Handroll Stopwatch",
+                    style: TextStyle(fontSize: 38),
+                  ),
                   const Spacer(flex: 3),
                   Container(
                     child: Column(children: [

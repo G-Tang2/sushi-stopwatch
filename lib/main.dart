@@ -12,6 +12,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Sushi Stopwatch',
       theme: ThemeData(
+        fontFamily: 'Avenir',
         brightness: Brightness.dark,
         primarySwatch: Colors.green,
       ),

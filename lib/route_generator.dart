@@ -6,9 +6,10 @@ import 'package:sushi_stopwatch/page/stopwatch_page.dart';
 
 class ResultsArguments {
   final Duration duration;
+  final double secondsPerRoll;
   final double numberOfRolls;
 
-  ResultsArguments(this.duration, this.numberOfRolls);
+  ResultsArguments(this.duration, this.secondsPerRoll, this.numberOfRolls);
 }
 
 class StopwatchArguments {
@@ -38,8 +39,8 @@ class RouteGenerator {
         if (settings.arguments is ResultsArguments) {
           args = settings.arguments as ResultsArguments;
           return MaterialPageRoute(
-              builder: (context) =>
-                  ResultsPage(args.duration, args.numberOfRolls));
+              builder: (context) => ResultsPage(
+                  args.duration, args.secondsPerRoll, args.numberOfRolls));
         } else {
           return _errorRoute();
         }

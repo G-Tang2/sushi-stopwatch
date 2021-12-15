@@ -117,8 +117,8 @@ class _StopwatchPageState extends State<StopWatchPage> {
                 onPressed: () {
                   pauseTimer(resets: false);
                   Navigator.pushNamed(context, ResultsPage.route,
-                          arguments:
-                              ResultsArguments(_duration, widget.numberOfRolls))
+                          arguments: ResultsArguments(_duration,
+                              widget.secondsPerRoll, widget.numberOfRolls))
                       .then((value) {
                     reset();
                   });
@@ -138,7 +138,7 @@ class _StopwatchPageState extends State<StopWatchPage> {
     return Container(
         margin: const EdgeInsets.all(25),
         child: Column(children: <Widget>[
-          const Text('SETTINGS', style: const TextStyle(color: Colors.grey)),
+          const Text('SETTINGS', style: TextStyle(color: Colors.grey)),
           Text('Seconds per roll: ${widget.secondsPerRoll.round()}',
               style: const TextStyle(height: 1.5, color: Colors.grey)),
           Text('Number of rolls: ${widget.numberOfRolls.round()}',

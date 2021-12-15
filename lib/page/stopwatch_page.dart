@@ -43,14 +43,22 @@ class _StopwatchPageState extends State<StopWatchPage> {
               children: [
                 Expanded(
                     child: Column(children: [
-                  const Spacer(flex: 5),
+                  const Spacer(flex: 3),
                   FormattedTime(_duration).buildTime(),
-                  const Spacer(flex: 3),
-                  LinearProgressIndicator(
-                      value: ((_duration.inMilliseconds %
-                              (widget.secondsPerRoll * 1000))) /
-                          (widget.secondsPerRoll * 1000)),
-                  const Spacer(flex: 3),
+                  const Spacer(flex: 2),
+                  Text(
+                    '$_expectedCompletedRolls',
+                    style: const TextStyle(fontSize: 64),
+                  ),
+                  Container(
+                      margin: const EdgeInsets.all(25),
+                      child: LinearProgressIndicator(
+                          value: ((_duration.inMilliseconds %
+                                  (widget.secondsPerRoll * 1000))) /
+                              (widget.secondsPerRoll * 1000))),
+                  const Spacer(
+                    flex: 1,
+                  ),
                   configFields()
                 ])),
                 Container(
@@ -127,14 +135,15 @@ class _StopwatchPageState extends State<StopWatchPage> {
   }
 
   Widget configFields() {
-    return Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          Column(children: <Widget>[
-            Text('Seconds per roll: ${widget.secondsPerRoll.round()}s'),
-            Text('Expected number of rolls completed: $_expectedCompletedRolls')
-          ])
-        ]);
+    return Container(
+        margin: const EdgeInsets.all(25),
+        child: Column(children: <Widget>[
+          const Text('SETTINGS', style: const TextStyle(color: Colors.grey)),
+          Text('Seconds per roll: ${widget.secondsPerRoll.round()}',
+              style: const TextStyle(height: 1.5, color: Colors.grey)),
+          Text('Number of rolls: ${widget.numberOfRolls.round()}',
+              style: const TextStyle(height: 1.5, color: Colors.grey))
+        ]));
   }
 
   Widget buildStopwatchButtons() {

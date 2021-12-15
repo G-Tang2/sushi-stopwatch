@@ -34,6 +34,16 @@ class _StopwatchPageState extends State<StopWatchPage> {
     startTimer();
   }
 
+  String remainingTime() {
+    final int expectedCompletionInMilliseconds =
+        (widget.secondsPerRoll * widget.numberOfRolls).round() * 1000;
+    final int remainingTimeInMilliseconds =
+        expectedCompletionInMilliseconds - _duration.inMilliseconds;
+    final Duration remainingDuration =
+        Duration(milliseconds: remainingTimeInMilliseconds);
+    return FormattedTime(remainingDuration).formattedTime();
+  }
+
   @override
   Widget build(BuildContext context) => Scaffold(
         body: Center(
@@ -43,8 +53,12 @@ class _StopwatchPageState extends State<StopWatchPage> {
               children: [
                 Expanded(
                     child: Column(children: [
-                  const Spacer(flex: 3),
+                  const Spacer(flex: 4),
                   FormattedTime(_duration).buildTime(),
+                  Text(
+                    remainingTime(),
+                    style: const TextStyle(color: Colors.grey),
+                  ),
                   const Spacer(flex: 2),
                   Text(
                     '$_expectedCompletedRolls',

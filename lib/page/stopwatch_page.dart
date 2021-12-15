@@ -47,8 +47,9 @@ class _StopwatchPageState extends State<StopWatchPage> {
                   FormattedTime(_duration).buildTime(),
                   const Spacer(flex: 3),
                   LinearProgressIndicator(
-                      value: (_duration.inSeconds % widget.secondsPerRoll) /
-                          widget.secondsPerRoll),
+                      value: ((_duration.inMilliseconds %
+                              (widget.secondsPerRoll * 1000))) /
+                          (widget.secondsPerRoll * 1000)),
                   const Spacer(flex: 3),
                   configFields()
                 ])),

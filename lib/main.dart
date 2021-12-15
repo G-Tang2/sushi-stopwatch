@@ -12,7 +12,8 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Sushi Stopwatch',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        brightness: Brightness.dark,
+        primarySwatch: Colors.green,
       ),
       initialRoute: '/',
       onGenerateRoute: RouteGenerator.generateRoute,

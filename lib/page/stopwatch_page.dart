@@ -39,9 +39,12 @@ class _StopwatchPageState extends State<StopWatchPage> {
         (widget.secondsPerRoll * widget.numberOfRolls).round() * 1000;
     final int remainingTimeInMilliseconds =
         expectedCompletionInMilliseconds - _duration.inMilliseconds;
-    final Duration remainingDuration =
-        Duration(milliseconds: remainingTimeInMilliseconds);
-    return FormattedTime(remainingDuration).formattedTime();
+    final Duration remainingDuration = remainingTimeInMilliseconds >= 0
+        ? Duration(milliseconds: remainingTimeInMilliseconds)
+        : Duration(milliseconds: remainingTimeInMilliseconds * -1);
+    return remainingTimeInMilliseconds >= 0
+        ? '-${FormattedTime(remainingDuration).formattedTime()}'
+        : '+${FormattedTime(remainingDuration).formattedTime()}';
   }
 
   @override

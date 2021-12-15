@@ -80,7 +80,7 @@ class _StopwatchPageState extends State<StopWatchPage> {
                 ])),
                 Container(
                   child: buildStopwatchButtons(),
-                  margin: const EdgeInsets.fromLTRB(15, 20, 15, 20),
+                  margin: const EdgeInsets.fromLTRB(15, 20, 15, 30),
                 )
               ]),
         ),

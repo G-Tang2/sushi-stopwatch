@@ -107,7 +107,7 @@ class ResultsPage extends StatelessWidget {
             Expanded(child: reportInfo()),
             Container(
               child: homeButton(context),
-              margin: const EdgeInsets.fromLTRB(15, 20, 15, 20),
+              margin: const EdgeInsets.fromLTRB(15, 20, 15, 30),
             )
           ])),
     );

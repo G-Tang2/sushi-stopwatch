@@ -48,7 +48,7 @@ class _HomePageState extends State<HomePage> {
                 ])),
                 Container(
                   child: buildStartButton(),
-                  margin: const EdgeInsets.fromLTRB(25, 20, 25, 20),
+                  margin: const EdgeInsets.fromLTRB(25, 20, 25, 30),
                 )
               ]),
         ),

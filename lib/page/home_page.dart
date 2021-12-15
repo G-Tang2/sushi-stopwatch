@@ -39,28 +39,36 @@ class _HomePageState extends State<HomePage> {
                     child: Column(children: [
                       buildConfigFields(),
                     ]),
-                    margin: const EdgeInsets.fromLTRB(15, 20, 15, 0),
-                    padding: const EdgeInsets.fromLTRB(10, 25, 10, 25),
+                    margin: const EdgeInsets.fromLTRB(25, 20, 25, 0),
+                    padding: const EdgeInsets.fromLTRB(5, 25, 5, 25),
                     decoration: BoxDecoration(
                         border: Border.all(
                             color: Colors.grey.shade400, width: 1.5)),
                   )
                 ])),
                 Container(
-                  child: buildStopwatchButtons(),
-                  margin: const EdgeInsets.fromLTRB(15, 20, 15, 20),
+                  child: buildStartButton(),
+                  margin: const EdgeInsets.fromLTRB(25, 20, 25, 20),
                 )
               ]),
         ),
       );
 
-  Widget buildStopwatchButtons() {
-    return ElevatedButton(
-        onPressed: () {
-          Navigator.pushNamed(context, StopWatchPage.route,
-              arguments: StopwatchArguments(_secondsPerRoll, _numberOfRolls));
-        },
-        child: const Text('START'));
+  Widget buildStartButton() {
+    return SizedBox(
+      width: double.infinity,
+      child: ElevatedButton(
+          onPressed: () {
+            Navigator.pushNamed(context, StopWatchPage.route,
+                arguments: StopwatchArguments(_secondsPerRoll, _numberOfRolls));
+          },
+          child: const Padding(
+              padding: EdgeInsets.fromLTRB(0, 13, 0, 8),
+              child: Text(
+                'START',
+                style: TextStyle(fontSize: 32),
+              ))),
+    );
   }
 
   void updateSecondPerRoll(double value) {

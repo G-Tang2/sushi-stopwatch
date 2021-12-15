@@ -30,6 +30,25 @@ class ResultsPage extends StatelessWidget {
     }
   }
 
+  Widget homeButton(BuildContext context) {
+    return SizedBox(
+      width: double.infinity,
+      child: ElevatedButton(
+          onPressed: () {
+            Navigator.popUntil(
+                context,
+                (Route<dynamic> predicate) =>
+                    predicate.isFirst); // TODO: Issue with named routes
+          },
+          child: const Padding(
+              padding: EdgeInsets.fromLTRB(0, 13, 0, 8),
+              child: Text(
+                'CLOSE',
+                style: TextStyle(fontSize: 32),
+              ))),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -39,14 +58,10 @@ class ResultsPage extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
             reportInfo(),
-            ElevatedButton(
-                onPressed: () {
-                  Navigator.popUntil(
-                      context,
-                      (Route<dynamic> predicate) =>
-                          predicate.isFirst); // TODO: Issue with named routes
-                },
-                child: const Text('BACK'))
+            Container(
+              child: homeButton(context),
+              margin: const EdgeInsets.fromLTRB(15, 20, 15, 20),
+            )
           ])),
     );
   }

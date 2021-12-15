@@ -101,16 +101,29 @@ class _StopwatchPageState extends State<StopWatchPage> {
   }
 
   Widget stopTimer() {
-    return ElevatedButton(
-        onPressed: () {
-          pauseTimer(resets: false);
-          Navigator.pushNamed(context, ResultsPage.route,
-                  arguments: ResultsArguments(_duration, widget.numberOfRolls))
-              .then((value) {
-            reset();
-          });
-        },
-        child: const Text('STOP'));
+    return Expanded(
+        flex: 1,
+        child: Container(
+            margin: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+            child: ElevatedButton(
+                onPressed: () {
+                  pauseTimer(resets: false);
+                  Navigator.pushNamed(context, ResultsPage.route,
+                          arguments:
+                              ResultsArguments(_duration, widget.numberOfRolls))
+                      .then((value) {
+                    reset();
+                  });
+                },
+                child: const Padding(
+                    padding: EdgeInsets.fromLTRB(0, 13, 0, 8),
+                    child: Text(
+                      'STOP',
+                      style: TextStyle(fontSize: 32),
+                    )),
+                style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.all<Color>(
+                        Colors.red.shade400)))));
   }
 
   Widget configFields() {
@@ -127,19 +140,41 @@ class _StopwatchPageState extends State<StopWatchPage> {
   Widget buildStopwatchButtons() {
     final isRunning = _timer == null ? false : _timer!.isActive;
 
-    return Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
-      ElevatedButton(
-          onPressed: () {
-            if (isRunning) {
-              pauseTimer(resets: false);
-            } else {
-              startTimer(resets: false);
-            }
-          },
-          child: Text(isRunning ? 'PAUSE' : 'RESUME')),
-      isRunning
-          ? stopTimer()
-          : ElevatedButton(onPressed: pauseTimer, child: const Text('RESET')),
-    ]);
+    return SizedBox(
+        width: double.infinity,
+        child:
+            Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
+          Expanded(
+              flex: 1,
+              child: Container(
+                  margin: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+                  child: ElevatedButton(
+                      onPressed: () {
+                        if (isRunning) {
+                          pauseTimer(resets: false);
+                        } else {
+                          startTimer(resets: false);
+                        }
+                      },
+                      child: Padding(
+                          padding: const EdgeInsets.fromLTRB(0, 13, 0, 8),
+                          child: Text(isRunning ? 'PAUSE' : 'RESUME',
+                              style: const TextStyle(fontSize: 32)))))),
+          isRunning
+              ? stopTimer()
+              : Expanded(
+                  flex: 1,
+                  child: Container(
+                      margin: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+                      child: ElevatedButton(
+                          onPressed: pauseTimer,
+                          child: const Padding(
+                              padding: EdgeInsets.fromLTRB(0, 13, 0, 8),
+                              child: Text('RESET',
+                                  style: TextStyle(fontSize: 32))),
+                          style: ButtonStyle(
+                              backgroundColor: MaterialStateProperty.all<Color>(
+                                  Colors.grey))))),
+        ]));
   }
 }

@@ -39,7 +39,7 @@ class ResultsPage extends StatelessWidget {
               TextSpan(
                   text: '${_numberOfRolls.round()} handrolls',
                   style: TextStyle(color: Colors.purple[200])),
-              const TextSpan(text: '. That\s an average pace of '),
+              const TextSpan(text: '. That\'s an average pace of '),
               TextSpan(
                   text: '${actualSecondsPerRoll}s/roll',
                   style: const TextStyle(color: Colors.orange)),
@@ -70,7 +70,7 @@ class ResultsPage extends StatelessWidget {
     } else {
       return Container(
           alignment: Alignment.center,
-          margin: EdgeInsets.all(35),
+          margin: const EdgeInsets.all(35),
           child: const Text(
             'Mate, you can\'t finish making hand rolls that quickly.',
             textAlign: TextAlign.center,
@@ -85,9 +85,7 @@ class ResultsPage extends StatelessWidget {
       child: ElevatedButton(
           onPressed: () {
             Navigator.popUntil(
-                context,
-                (Route<dynamic> predicate) =>
-                    predicate.isFirst); // TODO: Issue with named routes
+                context, (Route<dynamic> predicate) => predicate.isFirst);
           },
           child: const Padding(
               padding: EdgeInsets.fromLTRB(0, 13, 0, 8),

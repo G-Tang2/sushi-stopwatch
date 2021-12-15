@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:sushi_stopwatch/main.dart';
 import 'package:sushi_stopwatch/page/home_page.dart';
 import 'package:sushi_stopwatch/page/results_page.dart';
 import 'package:sushi_stopwatch/page/stopwatch_page.dart';
@@ -21,6 +20,7 @@ class StopwatchArguments {
 
 class RouteGenerator {
   static Route<dynamic> generateRoute(RouteSettings settings) {
+    // ignore: prefer_typing_uninitialized_variables
     var args;
 
     switch (settings.name) {
@@ -51,7 +51,7 @@ class RouteGenerator {
 
   static Route<dynamic> _errorRoute() {
     return MaterialPageRoute(builder: (_) {
-      return Scaffold(
+      return const Scaffold(
           body: Center(child: Text('Oops, the page does not exist.')));
     });
   }

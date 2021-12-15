@@ -9,8 +9,6 @@ class FormattedTime extends StatelessWidget {
       n.toString().padLeft(padLength, '0');
 
   String formattedTime() {
-    String _padDigits(int n, int padLength) =>
-        n.toString().padLeft(padLength, '0');
     final minutes = _padDigits(_duration.inMinutes.remainder(60), 2);
     final seconds = _padDigits(_duration.inSeconds.remainder(60), 2);
     final milliseconds =

@@ -8,8 +8,11 @@ import 'package:sushi_stopwatch/widget/formatted_time.dart';
 
 class StopWatchPage extends StatefulWidget {
   static const String route = '/stopwatch';
+  final double secondsPerRoll;
+  final double numberOfRolls;
 
-  const StopWatchPage({Key? key}) : super(key: key);
+  const StopWatchPage(this.secondsPerRoll, this.numberOfRolls, {Key? key})
+      : super(key: key);
 
   @override
   _StopwatchPageState createState() => _StopwatchPageState();
@@ -18,8 +21,6 @@ class StopWatchPage extends StatefulWidget {
 class _StopwatchPageState extends State<StopWatchPage> {
   Duration _duration = const Duration();
   Timer? _timer;
-  double _secondsPerRoll = 30;
-  double _numberOfRolls = 8;
   int _expectedCompletedRolls = 0;
   final int _intervalInMilliseconds = 47;
   final AudioCache _audioCache = AudioCache(
@@ -45,6 +46,11 @@ class _StopwatchPageState extends State<StopWatchPage> {
                   const Spacer(flex: 5),
                   FormattedTime(_duration).buildTime(),
                   const Spacer(flex: 3),
+                  LinearProgressIndicator(
+                      value: (_duration.inSeconds % widget.secondsPerRoll) /
+                          widget.secondsPerRoll),
+                  const Spacer(flex: 3),
+                  configFields()
                 ])),
                 Container(
                   child: buildStopwatchButtons(),
@@ -60,7 +66,7 @@ class _StopwatchPageState extends State<StopWatchPage> {
       _duration = Duration(milliseconds: milliseconds);
     });
 
-    intervalNotification(_secondsPerRoll);
+    intervalNotification(widget.secondsPerRoll);
   }
 
   void intervalNotification(double intervalInSeconds) {
@@ -98,12 +104,23 @@ class _StopwatchPageState extends State<StopWatchPage> {
         onPressed: () {
           pauseTimer(resets: false);
           Navigator.pushNamed(context, ResultsPage.route,
-                  arguments: ResultsArguments(_duration, _numberOfRolls))
+                  arguments: ResultsArguments(_duration, widget.numberOfRolls))
               .then((value) {
             reset();
           });
         },
         child: const Text('STOP'));
+  }
+
+  Widget configFields() {
+    return Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Column(children: <Widget>[
+            Text('Seconds per roll: ${widget.secondsPerRoll.round()}s'),
+            Text('Expected number of rolls completed: $_expectedCompletedRolls')
+          ])
+        ]);
   }
 
   Widget buildStopwatchButtons() {
@@ -123,17 +140,5 @@ class _StopwatchPageState extends State<StopWatchPage> {
           ? stopTimer()
           : ElevatedButton(onPressed: pauseTimer, child: const Text('RESET')),
     ]);
-  }
-
-  void updateSecondPerRoll(double value) {
-    setState(() {
-      _secondsPerRoll = value;
-    });
-  }
-
-  void updateNumberOfRolls(double value) {
-    setState(() {
-      _numberOfRolls = value;
-    });
   }
 }

@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:sushi_stopwatch/page/results_page.dart';
+import 'package:sushi_stopwatch/page/stopwatch_page.dart';
+import 'package:sushi_stopwatch/route_generator.dart';
 
 class HomePage extends StatefulWidget {
   static const String route = '/';
@@ -52,7 +55,8 @@ class _HomePageState extends State<HomePage> {
   Widget buildStopwatchButtons() {
     return ElevatedButton(
         onPressed: () {
-          Navigator.pushNamed(context, '/stopwatch');
+          Navigator.pushNamed(context, StopWatchPage.route,
+              arguments: StopwatchArguments(_secondsPerRoll, _numberOfRolls));
         },
         child: const Text('START'));
   }

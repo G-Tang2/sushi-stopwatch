@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:sushi_stopwatch/page/results_page.dart';
 import 'package:sushi_stopwatch/route_generator.dart';
 import 'package:sushi_stopwatch/widget/formatted_time.dart';
+import 'package:wakelock/wakelock.dart';
 
 class StopWatchPage extends StatefulWidget {
   static const String route = '/stopwatch';
@@ -111,6 +112,9 @@ class _StopwatchPageState extends State<StopWatchPage> {
   }
 
   void startTimer({bool resets = true}) {
+    setState(() {
+      Wakelock.enable();
+    });
     if (resets) {
       reset();
     }
@@ -118,6 +122,9 @@ class _StopwatchPageState extends State<StopWatchPage> {
   }
 
   void pauseTimer({bool resets = true}) {
+    setState(() {
+      Wakelock.disable();
+    });
     if (resets) {
       reset();
     }
